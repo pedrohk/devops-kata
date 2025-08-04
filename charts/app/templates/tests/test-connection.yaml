@@ -1,26 +1,15 @@
-devops-kata
-├── .github
-│   └── workflows
-│       └── docker-build-push.yml
-├── charts
-│   ├── app
-│   │   ├── Chart.yaml
-│   │   ├── templates
-│   │   │   ├── _helpers.tpl
-│   │   │   └── tests
-│   │   │       └── test-connection.yaml
-│   │   └── values.yaml
-│   └── infra
-│       ├── Chart.yaml
-│       └── values.yaml
-├── infrastructure
-│   ├── main.tf
-│   ├── variables.tf
-│   └── tests
-│       └── integration_test.tftest.hcl
-├── sample-app
-│   ├── main.go
-│   ├── Dockerfile
-│   └── Makefile
-├── Jenkinsfile
-└── README.md
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "app.fullname" . }}-test-connection"
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "app.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

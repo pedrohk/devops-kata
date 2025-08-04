@@ -1,26 +1,32 @@
-devops-kata
-├── .github
-│   └── workflows
-│       └── docker-build-push.yml
-├── charts
-│   ├── app
-│   │   ├── Chart.yaml
-│   │   ├── templates
-│   │   │   ├── _helpers.tpl
-│   │   │   └── tests
-│   │   │       └── test-connection.yaml
-│   │   └── values.yaml
-│   └── infra
-│       ├── Chart.yaml
-│       └── values.yaml
-├── infrastructure
-│   ├── main.tf
-│   ├── variables.tf
-│   └── tests
-│       └── integration_test.tftest.hcl
-├── sample-app
-│   ├── main.go
-│   ├── Dockerfile
-│   └── Makefile
-├── Jenkinsfile
-└── README.md
+prometheus:
+  server:
+    service:
+      type: ClusterIP
+
+  serviceMonitors:
+    enabled: true
+    additionalServiceMonitors:
+      - name: app-monitor
+        selector:
+          matchLabels:
+            app: sample-app
+        namespaceSelector:
+          matchNames:
+            - apps
+        endpoints:
+          - port: metrics
+            path: /metrics
+            interval: 30s
+
+grafana:
+  adminPassword: prom-operator
+  service:
+    type: ClusterIP
+  persistence:
+    enabled: false
+  dashboards:
+    default:
+      sample-dashboard:
+        gnetId: 1860
+        revision: 23
+        datasource: Prometheus
