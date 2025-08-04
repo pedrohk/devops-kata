@@ -1,0 +1,6 @@
+Sure, here's the content for the file: /devops-kata/devops-kata/charts/app/Chart.yaml
+
+apiVersion: v2
+name: app
+version: 0.1.0
+dependencies: []
