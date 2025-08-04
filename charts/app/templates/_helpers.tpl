@@ -1,26 +1,14 @@
-devops-kata
-├── .github
-│   └── workflows
-│       └── docker-build-push.yml
-├── charts
-│   ├── app
-│   │   ├── Chart.yaml
-│   │   ├── templates
-│   │   │   ├── _helpers.tpl
-│   │   │   └── tests
-│   │   │       └── test-connection.yaml
-│   │   └── values.yaml
-│   └── infra
-│       ├── Chart.yaml
-│       └── values.yaml
-├── infrastructure
-│   ├── main.tf
-│   ├── variables.tf
-│   └── tests
-│       └── integration_test.tftest.hcl
-├── sample-app
-│   ├── main.go
-│   ├── Dockerfile
-│   └── Makefile
-├── Jenkinsfile
-└── README.md
+{{- define "app.fullname" -}}
+{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "app.labels" -}}
+app.kubernetes.io/name: {{ include "app.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{- define "app.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
