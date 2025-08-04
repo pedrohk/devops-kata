@@ -19,7 +19,7 @@ The purpose of this project is to provide a comprehensive example of how to set 
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/example/devops-kata.git
+   git clone https://github.com/pedrohk/devops-kata
    cd devops-kata
    ```
 
